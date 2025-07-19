@@ -43,13 +43,13 @@ st.markdown("""
 @st.cache_data
 def load_data():
     try:
-        sales = pd.read_csv("../data/sales.csv", parse_dates=["date"])
-        products = pd.read_csv("../data/products.csv")
-        stores = pd.read_csv("../data/stores.csv")
-        features = pd.read_csv("../data/features_full.csv", parse_dates=["date"])
-        model = joblib.load("../models/lightgbm_demand_model.pkl")
-        feature_order = joblib.load("../models/feature_order.pkl")
-        cat_levels = joblib.load("../models/categorical_levels.pkl")
+        sales = pd.read_csv("data/sales.csv", parse_dates=["date"])
+        products = pd.read_csv("data/products.csv")
+        stores = pd.read_csv("data/stores.csv")
+        features = pd.read_csv("data/features_full.csv", parse_dates=["date"])
+        model = joblib.load("models/lightgbm_demand_model.pkl")
+        feature_order = joblib.load("models/feature_order.pkl")
+        cat_levels = joblib.load("models/categorical_levels.pkl")
         total_records = len(sales)
         return sales, products, stores, features, model, feature_order, cat_levels, total_records
     except FileNotFoundError as e:
@@ -63,7 +63,6 @@ if sales is None: st.stop()
 # --- Боковая панель ---
 st.sidebar.title(t("sidebar_title"))
 
-# --- Исправленный переключатель языка ---
 def update_language():
     lang_name = st.session_state.lang_selector
     lang_code = next(code for code, data in all_translations.items() if data["lang_name"] == lang_name)
@@ -80,7 +79,6 @@ st.sidebar.selectbox(
     on_change=update_language,
     key='lang_selector'
 )
-# --- Конец исправленного блока ---
 
 st.sidebar.markdown("---")
 st.sidebar.header(t("sidebar_header_analysis"))
@@ -100,7 +98,6 @@ predict_btn = st.sidebar.button(t("predict_button"))
 st.title(t("main_title"))
 st.markdown(t("main_subtitle", store=store_id, product=product_id))
 
-# --- Блок предварительных вычислений для KPI и вкладок ---
 start_time = time.time()
 df_filtered_full = sales[(sales['store_id'] == store_id) & (sales['product_id'] == product_id)]
 df_model_analysis = features[(features['store_id'] == store_id) & (features['product_id'] == product_id)].copy()
@@ -137,7 +134,6 @@ if not df_model_analysis.empty:
 num_records = len(df_filtered_full)
 processing_time = time.time() - start_time
 
-# --- Отображение KPI карточек ---
 kpi1, kpi2, kpi3 = st.columns(3)
 with kpi1:
     st.markdown(f'''<div class="kpi-card"><h3>{t("kpi_accuracy_title")}</h3><p class="value">{accuracy:.1f}%</p><p class="subtext">{t("kpi_accuracy_subtitle")}</p></div>''', unsafe_allow_html=True)
@@ -148,7 +144,6 @@ with kpi3:
 
 st.markdown("---")
 
-# --- Вкладки ---
 tab1, tab2, tab3 = st.tabs([t("tab_sales_analysis"), t("tab_forecast"), t("tab_model_quality")])
 
 with tab1:
@@ -224,10 +219,10 @@ with tab2:
     st.subheader(t("forecast_on_date_title", date=sel_date.strftime('%d.%m.%Y')))
     if predict_btn:
         with st.spinner(t("api_request_spinner")):
-            api_url = "https://aurorix-api.onrender.com"
+            api_url = "https://aurorix-api.onrender.com/predict"
             payload = {"store_id": store_id, "product_id": product_id, "date": sel_date.strftime("%Y-%m-%d")}
             try:
-                response = requests.post(api_url, json=payload, timeout=10)
+                response = requests.post(api_url, json=payload, timeout=30) # Увеличиваем таймаут для холодного старта
                 if response.status_code == 200:
                     result = response.json()
                     forecast_value = result.get("forecast_sales_next_7d")

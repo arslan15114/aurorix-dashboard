@@ -3,7 +3,7 @@ import pandas as pd
 import plotly.express as px
 import numpy as np
 from datetime import timedelta
-from dashboard.localization import t, all_translations
+from localization import t, all_translations  # <<< ИСПРАВЛЕНО
 
 if 'lang' not in st.session_state:
     st.session_state.lang = 'ru'
@@ -77,7 +77,6 @@ with tab1:
         top_10_products_ids = data_to_analyze.groupby('product_id')['sales'].sum().nlargest(10).index
         df_top10 = data_to_analyze[data_to_analyze['product_id'].isin(top_10_products_ids)].copy()
 
-        # Создаем сводную таблицу: товары - строки, даты - столбцы
         top10_pivot = df_top10.pivot_table(
             index=['product_id', 'brand'],
             columns=df_top10['date'].dt.strftime('%Y-%m-%d'),

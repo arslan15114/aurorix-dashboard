@@ -3,7 +3,7 @@ import pandas as pd
 import joblib
 import plotly.graph_objects as go
 import numpy as np
-from dashboard.localization import t, all_translations
+from localization import t, all_translations # <<< ИСПРАВЛЕНО
 
 if 'lang' not in st.session_state:
     st.session_state.lang = 'ru'
