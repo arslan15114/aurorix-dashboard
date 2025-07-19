@@ -224,7 +224,7 @@ with tab2:
     st.subheader(t("forecast_on_date_title", date=sel_date.strftime('%d.%m.%Y')))
     if predict_btn:
         with st.spinner(t("api_request_spinner")):
-            api_url = "http://127.0.0.1:5000/predict"
+            api_url = "https://aurorix-api.onrender.com"
             payload = {"store_id": store_id, "product_id": product_id, "date": sel_date.strftime("%Y-%m-%d")}
             try:
                 response = requests.post(api_url, json=payload, timeout=10)
