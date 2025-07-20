@@ -222,7 +222,8 @@ with tab2:
             api_url = "https://aurorix-api.onrender.com/predict"
             payload = {"store_id": store_id, "product_id": product_id, "date": sel_date.strftime("%Y-%m-%d")}
             try:
-                response = requests.post(api_url, json=payload, timeout=30) # Увеличиваем таймаут для холодного старта
+                # <<< ИЗМЕНЕНО: Таймаут увеличен до 60 секунд >>>
+                response = requests.post(api_url, json=payload, timeout=60)
                 if response.status_code == 200:
                     result = response.json()
                     forecast_value = result.get("forecast_sales_next_7d")
