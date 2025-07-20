@@ -7,6 +7,14 @@
   <img src="https://img.shields.io/badge/status-live-brightgreen?style=flat-square" alt="Status">
   <img src="https://img.shields.io/badge/python-3.11+-blue?style=flat-square" alt="Python">
 </p>
+### 🏛️ Project Architecture
+
+This project consists of two main components that work together:
+
+1.  **Frontend (This Repository):** An interactive Streamlit dashboard that serves as the user interface for analytics and forecasting.
+2.  **Backend (Separate Repository):** A Flask-based REST API that handles all machine learning computations, feature engineering, and model predictions.
+
+➡️ **You can find the backend API repository here: [github.com/arslan15114/aurorix-api](https://github.com/arslan15114/aurorix-api)**
 
 Welcome to the **Aurorix.Retail Dashboard**—an intuitive, multi-page web application designed to transform retail management from guesswork into a data-driven science. Built with Streamlit, this platform provides managers and analysts with a powerful toolkit for making smarter, faster, and more profitable decisions.
 
